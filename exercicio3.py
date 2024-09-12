@@ -7,6 +7,7 @@ def main() -> None:
     
     numPlayer = int(input("Digite um número aleatório de 1 a 100: "))
     randomNum = random.randrange(0,100)
+    cont = 1;
     while(numPlayer != randomNum):
        
         if(numPlayer > randomNum):
@@ -16,13 +17,14 @@ def main() -> None:
             print("Tente um numero maior")
         
         numPlayer = int(input())
+        cont = cont+1
+        
         
        
     print("Você acertou!")
+    print(f"Você tentou {cont} vezes.")
     
     # print(f"O número correto é:{randomNum}")
 
 if __name__ == "__main__":
     main()
-
-
