@@ -1051,16 +1051,20 @@ def devolver_livro(livro, membro, data_devolucao):
             else:
                 print("Livro devolvido com sucesso.")
             locacoes.remove(locacao)
-            livros[livro]["quantidade"] += 1
+            livros[livro]["quantidade"] += 1 #Tem um problema aqui pra resolver
             return
     print("Locação não encontrada.")
 
 def gerar_relatorio(data_inicio, data_fim):
+    data_inicio = datetime.datetime.strptime(data_inicio, "%Y-%m-%d")
+    data_fim = datetime.datetime.strptime(data_fim, "%Y-%m-%d")
+
     relatorio = {}
     for locacao in locacoes:
         data_loc = datetime.datetime.strptime(locacao["data_locacao"], "%Y-%m-%d")
         if data_inicio <= data_loc <= data_fim:
-            membro = locacao["membro"]
+            membro = locacao["membro"] 
+
             if membro not in relatorio:
                 relatorio[membro] = {
                     "locacoes": 1,
@@ -1070,13 +1074,11 @@ def gerar_relatorio(data_inicio, data_fim):
                 }
             else:
                 relatorio[membro]["locacoes"] += 1
-            # ... calcular devoluções, atrasos e multas
 
-    # Imprimir o relatório formatado
     for membro, dados in relatorio.items():
         print(f"Membro {membro}:")
         print(f"  Locações: {dados['locacoes']}")
-        # ... imprimir outros dados
+        
 while True:
     menu()
     opcao = int(input("Escolha uma opção: "))
