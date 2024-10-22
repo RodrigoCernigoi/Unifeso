@@ -14,7 +14,9 @@
 import datetime
 
 livros = [
+  
   {
+    
     "titulo": 1984,
     "autores": "George Orwell",
     "edicao": 1,
@@ -1017,26 +1019,29 @@ def menu():
     print("4. Sair")
 
 def locar_livro(livro, membro, data_locacao):
-    
-    
-    if not membros[membro]:
-        print("Membro não pertence à instituição.")
-        return
+    for livro_info in livros:
+        if livro_info["titulo"] == livro:
+            for membro_info in membros:
+                if membro_info["matricula"] == membro:
+                    print("Membro não pertence à instituição.")
+                    return
+            if livro_info["quantidade"] == 0:
+                print("Não há exemplares disponíveis deste livro.")
+                return
 
-    if livros[livro]["quantidade"] > 0:
-        locacoes.append({
-            "livro": livro,
-            "membro": membro,
-            "data_locacao": data_locacao,
-            "data_devolucao": (datetime.datetime.strptime(data_locacao, "%Y-%m-%d") + datetime.timedelta(days=15)).strftime("%Y-%m-%d")
-        })
-        livros[livro]["quantidade"] -= 1
-        print("Livro locado com sucesso!")
-    else:
-        print("Não há exemplares disponíveis deste livro.")
+            locacoes.append({
+                "livro": livro,
+                "membro": membro,
+                "data_locacao": data_locacao,
+                "data_devolucao": (datetime.datetime.strptime(data_locacao, "%Y-%m-%d") + datetime.timedelta(days=15)).strftime("%Y-%m-%d")
+            })
+            livro_info["quantidade"] -= 1
+            print("Livro locado com sucesso!")
+            return 
 
+    print("Livro não encontrado.")
 def devolver_livro(livro, membro, data_devolucao):
-    for locacoes in locacoes:
+    for locacao in locacoes:
         if locacao["livro"] == livro and locacao["membro"] == membro:
             data_devolucao_esperada = locacao["data_devolucao"]
             if data_devolucao > data_devolucao_esperada:
@@ -1051,8 +1056,27 @@ def devolver_livro(livro, membro, data_devolucao):
     print("Locação não encontrada.")
 
 def gerar_relatorio(data_inicio, data_fim):
-    # Função para gerar o relatorio
+    relatorio = {}
+    for locacao in locacoes:
+        data_loc = datetime.datetime.strptime(locacao["data_locacao"], "%Y-%m-%d")
+        if data_inicio <= data_loc <= data_fim:
+            membro = locacao["membro"]
+            if membro not in relatorio:
+                relatorio[membro] = {
+                    "locacoes": 1,
+                    "devolucoes": 0,
+                    "atrasos": 0,
+                    "multa": 0
+                }
+            else:
+                relatorio[membro]["locacoes"] += 1
+            # ... calcular devoluções, atrasos e multas
 
+    # Imprimir o relatório formatado
+    for membro, dados in relatorio.items():
+        print(f"Membro {membro}:")
+        print(f"  Locações: {dados['locacoes']}")
+        # ... imprimir outros dados
 while True:
     menu()
     opcao = int(input("Escolha uma opção: "))
