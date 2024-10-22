@@ -1009,7 +1009,7 @@ locacoes = [
         "data_locacao": "2023-11-20",
         "data_devolucao": "2023-12-05"
     },
-    # ... outras locações
+    # teste de locacao
 ]
 
 def menu():
@@ -1051,7 +1051,10 @@ def devolver_livro(livro, membro, data_devolucao):
             else:
                 print("Livro devolvido com sucesso.")
             locacoes.remove(locacao)
-            livros[livro]["quantidade"] += 1 #Tem um problema aqui pra resolver
+            for livro_info in livros:
+                if livro_info["titulo"] == livro:
+                    livro_info["quantidade"] += 1
+                    break
             return
     print("Locação não encontrada.")
 
