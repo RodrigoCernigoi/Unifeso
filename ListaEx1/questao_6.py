@@ -13,6 +13,7 @@
 # de atrasos e o total em reais pago em multas por cada membro.
 import datetime
 
+
 livros = [
   
   {
@@ -1007,7 +1008,10 @@ locacoes = [
         "livro": "1984",
         "membro": 20230001,
         "data_locacao": "2023-11-20",
-        "data_devolucao": "2023-12-05"
+        "data_devolucao": "2023-12-05",
+        "devolvido": False,
+        "atrasos": 0,
+        "multa": 0
     },
     # teste de locacao
 ]
@@ -1033,7 +1037,10 @@ def locar_livro(livro, membro, data_locacao):
                 "livro": livro,
                 "membro": membro,
                 "data_locacao": data_locacao,
-                "data_devolucao": (datetime.datetime.strptime(data_locacao, "%Y-%m-%d") + datetime.timedelta(days=15)).strftime("%Y-%m-%d")
+                "data_devolucao": (datetime.datetime.strptime(data_locacao, "%Y-%m-%d") + datetime.timedelta(days=15)).strftime("%Y-%m-%d"),
+                "devolvido": False,
+                "atrasos": 0,
+                "multa": 0
             })
             livro_info["quantidade"] -= 1
             print("Livro locado com sucesso!")
@@ -1042,15 +1049,19 @@ def locar_livro(livro, membro, data_locacao):
     print("Livro não encontrado.")
 def devolver_livro(livro, membro, data_devolucao):
     for locacao in locacoes:
-        if locacao["livro"] == livro and locacao["membro"] == membro:
+        if locacao["livro"] == livro and locacao["devolvido"] == False and locacao["membro"] == membro:
+            locacao["devolvido"] = True
             data_devolucao_esperada = locacao["data_devolucao"]
             if data_devolucao > data_devolucao_esperada:
                 dias_atraso = (datetime.datetime.strptime(data_devolucao, "%Y-%m-%d") - datetime.datetime.strptime(data_devolucao_esperada, "%Y-%m-%d")).days
                 multa = dias_atraso * 10
+                locacao["multa"] = multa
+                locacao["atrasos"] +=1;
                 print(f"Livro devolvido com {dias_atraso} dias de atraso. Multa de R$ {multa:.2f}.")
+                
             else:
                 print("Livro devolvido com sucesso.")
-            locacoes.remove(locacao)
+            
             for livro_info in livros:
                 if livro_info["titulo"] == livro:
                     livro_info["quantidade"] += 1
@@ -1061,27 +1072,42 @@ def devolver_livro(livro, membro, data_devolucao):
 def gerar_relatorio(data_inicio, data_fim):
     data_inicio = datetime.datetime.strptime(data_inicio, "%Y-%m-%d")
     data_fim = datetime.datetime.strptime(data_fim, "%Y-%m-%d")
+    
 
     relatorio = {}
+    
+    
     for locacao in locacoes:
+        
+        
         data_loc = datetime.datetime.strptime(locacao["data_locacao"], "%Y-%m-%d")
         if data_inicio <= data_loc <= data_fim:
-            membro = locacao["membro"] 
+            membro = locacao["membro"]
 
             if membro not in relatorio:
                 relatorio[membro] = {
                     "locacoes": 1,
-                    "devolucoes": 0,
+                    "devolucoes": int(locacao["devolvido"]),
                     "atrasos": 0,
-                    "multa": 0
+                    "multa": float(locacao["multa"])
                 }
             else:
                 relatorio[membro]["locacoes"] += 1
+                relatorio[membro]["devolucoes"] += int(locacao["devolvido"])
+                
+    
 
+    # Cabeçalho do relatório
+    print("Relatório de Locações")
+    print("-------------------------------------------------------")
+    print("Membro   | Locações | Devoluções | Atrasos | Multa     ")
+    print("---------|----------|------------|---------|-----------")
+
+    
     for membro, dados in relatorio.items():
-        print(f"Membro {membro}:")
-        print(f"  Locações: {dados['locacoes']}")
-        
+        print(f"{membro:7} | {dados['locacoes']:10} | {dados['devolucoes']:11} | {dados['atrasos']:7} | R$ {dados['multa']:5.2f}")
+
+    print("-------------------------------------------------------")
 while True:
     menu()
     opcao = int(input("Escolha uma opção: "))
