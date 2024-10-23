@@ -1009,9 +1009,27 @@ locacoes = [
         "membro": 20230001,
         "data_locacao": "2023-11-20",
         "data_devolucao": "2023-12-05",
-        "devolvido": False,
+        "devolvido": 0,
         "atrasos": 0,
         "multa": 0
+    },
+    {
+        "livro": "Dom Quixote",
+        "membro": 20230001,
+        "data_locacao": "2023-11-20",
+        "data_devolucao": "2023-12-05",
+        "devolvido": 0,
+        "atrasos": 0,
+        "multa": 10
+    },
+    {
+        "livro": "Til",
+        "membro": 20230001,
+        "data_locacao": "2023-11-20",
+        "data_devolucao": "2023-12-05",
+        "devolvido": 0,
+        "atrasos": 0,
+        "multa": 10
     },
     # teste de locacao
 ]
@@ -1038,7 +1056,7 @@ def locar_livro(livro, membro, data_locacao):
                 "membro": membro,
                 "data_locacao": data_locacao,
                 "data_devolucao": (datetime.datetime.strptime(data_locacao, "%Y-%m-%d") + datetime.timedelta(days=15)).strftime("%Y-%m-%d"),
-                "devolvido": False,
+                "devolvido": 0,
                 "atrasos": 0,
                 "multa": 0
             })
@@ -1049,8 +1067,8 @@ def locar_livro(livro, membro, data_locacao):
     print("Livro não encontrado.")
 def devolver_livro(livro, membro, data_devolucao):
     for locacao in locacoes:
-        if locacao["livro"] == livro and locacao["devolvido"] == False and locacao["membro"] == membro:
-            locacao["devolvido"] = True
+        if locacao["livro"] == livro and locacao["devolvido"] == 0 and locacao["membro"] == membro:
+            locacao["devolvido"] = 1
             data_devolucao_esperada = locacao["data_devolucao"]
             if data_devolucao > data_devolucao_esperada:
                 dias_atraso = (datetime.datetime.strptime(data_devolucao, "%Y-%m-%d") - datetime.datetime.strptime(data_devolucao_esperada, "%Y-%m-%d")).days
@@ -1092,8 +1110,11 @@ def gerar_relatorio(data_inicio, data_fim):
                     "multa": float(locacao["multa"])
                 }
             else:
+                
                 relatorio[membro]["locacoes"] += 1
                 relatorio[membro]["devolucoes"] += int(locacao["devolvido"])
+                relatorio[membro]["atrasos"] += int(locacao["atrasos"])
+                relatorio[membro]["multa"] += float(locacao["multa"]) 
                 
     
 
