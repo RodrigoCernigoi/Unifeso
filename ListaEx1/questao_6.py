@@ -1004,33 +1004,7 @@ membros = [
 ]
 
 locacoes = [
-    {
-        "livro": "1984",
-        "membro": 20230001,
-        "data_locacao": "2023-11-20",
-        "data_devolucao": "2023-12-05",
-        "devolvido": 0,
-        "atrasos": 0,
-        "multa": 0
-    },
-    {
-        "livro": "Dom Quixote",
-        "membro": 20230001,
-        "data_locacao": "2023-11-20",
-        "data_devolucao": "2023-12-05",
-        "devolvido": 0,
-        "atrasos": 0,
-        "multa": 10
-    },
-    {
-        "livro": "Til",
-        "membro": 20230001,
-        "data_locacao": "2023-11-20",
-        "data_devolucao": "2023-12-05",
-        "devolvido": 0,
-        "atrasos": 0,
-        "multa": 10
-    },
+    
     # teste de locacao
 ]
 
