@@ -1056,7 +1056,7 @@ def devolver_livro(livro, membro, data_devolucao):
                 dias_atraso = (datetime.datetime.strptime(data_devolucao, "%Y-%m-%d") - datetime.datetime.strptime(data_devolucao_esperada, "%Y-%m-%d")).days
                 multa = dias_atraso * 10
                 locacao["multa"] = multa
-                locacao["atrasos"] +=1;
+                locacao["atrasos"] += 1;
                 print(f"Livro devolvido com {dias_atraso} dias de atraso. Multa de R$ {multa:.2f}.")
                 
             else:
@@ -1088,7 +1088,7 @@ def gerar_relatorio(data_inicio, data_fim):
                 relatorio[membro] = {
                     "locacoes": 1,
                     "devolucoes": int(locacao["devolvido"]),
-                    "atrasos": 0,
+                    "atrasos": int(locacao["atrasos"]),
                     "multa": float(locacao["multa"])
                 }
             else:
