@@ -47,10 +47,15 @@ def menu():
 def locar_livro(livro, membro, data_locacao):
     for livro_info in livros:
         if livro_info["titulo"] == livro:
+            membro_encontrado = False
             for membro_info in membros:
                 if membro_info["matricula"] == membro:
-                    print("Membro não pertence à instituição.")
-                    return
+                    membro_encontrado = True
+                    break
+            if not membro_encontrado:
+                print("Membro não pertence à instituição.")
+                return
+           
             if livro_info["quantidade"] == 0:
                 print("Não há exemplares disponíveis deste livro.")
                 return
@@ -64,7 +69,7 @@ def locar_livro(livro, membro, data_locacao):
                 "atrasos": 0,
                 "multa": 0
             })
-            livro_info["quantidade"] -= 1
+            livro_info["quantidade"] = int(livro_info["quantidade"]) - 1
             print("Livro locado com sucesso!")
             return 
 
